@@ -53,39 +53,49 @@ export default function ProductPage({ params }: Props) {
     <main>
       <Nav />
 
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 px-24 border-b border-[#E8E8E8] bg-white" style={{ height: 44 }}>
-        <Link href="/" className="text-[11px] text-[#A8A49E] tracking-[1.5px] hover:text-[#1A1A18] transition-colors">
+      {/* Breadcrumb — scrollable on mobile for long product names */}
+      <div
+        className="flex items-center gap-2 px-4 md:px-24 border-b border-[#E8E8E8] bg-white overflow-x-auto scrollbar-hide whitespace-nowrap"
+        style={{ height: 44 }}
+      >
+        <Link href="/" className="text-[11px] text-[#A8A49E] tracking-[1.5px] hover:text-[#1A1A18] transition-colors shrink-0">
           HOME
         </Link>
-        <span className="text-[11px] text-[#D0CEC9]">/</span>
+        <span className="text-[11px] text-[#D0CEC9] shrink-0">/</span>
         <Link
           href={`/collections/${product.categorySlug}`}
-          className="text-[11px] text-[#A8A49E] tracking-[1.5px] hover:text-[#1A1A18] transition-colors uppercase"
+          className="text-[11px] text-[#A8A49E] tracking-[1.5px] hover:text-[#1A1A18] transition-colors uppercase shrink-0"
         >
           {product.category}
         </Link>
-        <span className="text-[11px] text-[#D0CEC9]">/</span>
-        <span className="text-[11px] font-semibold text-[#1A1A18] tracking-[1.5px] uppercase">
+        <span className="text-[11px] text-[#D0CEC9] shrink-0">/</span>
+        <span className="text-[11px] font-semibold text-[#1A1A18] tracking-[1.5px] uppercase shrink-0">
           {product.name}
         </span>
       </div>
 
-      {/* PDP Hero */}
-      <div className="flex bg-white" style={{ minHeight: 660 }}>
+      {/* PDP Hero
+          Mobile:  image full-width on top, info stacked below
+          Desktop: side-by-side, image panel left, info right     */}
+      <div className="flex flex-col md:flex-row bg-white md:min-h-[660px]">
+
         {/* Images panel */}
-        <div className="flex flex-col bg-[#F7F7F7] border-r border-[#E8E8E8]" style={{ width: 780 }}>
-          <div className="relative flex-1" style={{ height: 560 }}>
+        <div className="flex flex-col bg-[#F7F7F7] border-b md:border-b-0 md:border-r border-[#E8E8E8] w-full md:w-[55%] md:max-w-[780px]">
+          {/* Main image */}
+          <div className="relative w-full aspect-[4/5] md:aspect-auto md:flex-1 md:min-h-[560px]">
             <Image
               src={allImages[activeThumb]}
               alt={product.name}
               fill
-              className="object-contain p-10"
+              className="object-contain p-6 md:p-10"
               priority
+              sizes="(max-width: 768px) 100vw, 55vw"
             />
           </div>
+
+          {/* Thumbnails */}
           {allImages.length > 1 && (
-            <div className="flex gap-px bg-[#E8E8E8] border-t border-[#E8E8E8]" style={{ height: 100 }}>
+            <div className="flex gap-px bg-[#E8E8E8] border-t border-[#E8E8E8] h-[72px] md:h-[100px]">
               {allImages.map((img, i) => (
                 <button
                   key={i}
@@ -103,31 +113,31 @@ export default function ProductPage({ params }: Props) {
         </div>
 
         {/* Info panel */}
-        <div className="flex flex-col flex-1 px-[72px] py-16 bg-white overflow-y-auto">
+        <div className="flex flex-col flex-1 px-5 py-8 md:px-[72px] md:py-16 bg-white">
           {product.badge && (
             <div className="inline-flex items-center bg-[#1A1A18] px-[10px]" style={{ height: 24 }}>
               <span className="text-[10px] font-semibold tracking-[2px] text-white">{product.badge}</span>
             </div>
           )}
 
-          <div style={{ height: 20 }} />
+          <div style={{ height: 16 }} />
 
           <h1
             className="font-bold text-[#1A1A18] leading-tight"
-            style={{ fontSize: 32, letterSpacing: -1 }}
+            style={{ fontSize: 'clamp(24px, 4vw, 32px)', letterSpacing: -1 }}
           >
             {product.name}
           </h1>
 
-          <div style={{ height: 12 }} />
-          <p className="text-[22px] text-[#1A1A18]">{product.price}</p>
-          <div style={{ height: 28 }} />
+          <div style={{ height: 10 }} />
+          <p className="text-[20px] md:text-[22px] text-[#1A1A18]">{product.price}</p>
+          <div style={{ height: 24 }} />
 
           <div className="h-px bg-[#E8E8E8]" />
-          <div style={{ height: 28 }} />
+          <div style={{ height: 24 }} />
 
           <p className="text-[14px] text-[#6B6760] leading-[1.7]">{product.description}</p>
-          <div style={{ height: 32 }} />
+          <div style={{ height: 28 }} />
 
           {/* Size info row */}
           <div className="flex items-center justify-between">
@@ -135,7 +145,7 @@ export default function ProductPage({ params }: Props) {
             <span className="text-[11px] text-[#A8A49E] tracking-[1px]">33 × 25 cm</span>
           </div>
 
-          <div style={{ height: 32 }} />
+          <div style={{ height: 28 }} />
 
           {/* Add to Cart */}
           <button
@@ -162,15 +172,15 @@ export default function ProductPage({ params }: Props) {
             {wishlisted ? 'SAVED' : 'SAVE TO WISHLIST'}
           </button>
 
-          <div style={{ height: 32 }} />
+          <div style={{ height: 28 }} />
           <div className="h-px bg-[#E8E8E8]" />
-          <div style={{ height: 24 }} />
+          <div style={{ height: 20 }} />
 
           {/* Details row */}
-          <div className="flex items-center gap-6 flex-wrap">
+          <div className="flex items-center gap-5 flex-wrap">
             {['Handmade in Istanbul', 'Ships in 2–3 days', 'Free returns'].map((detail) => (
               <div key={detail} className="flex items-center gap-2">
-                <span className="w-1 h-1 bg-[#C4572A] rounded-full" />
+                <span className="w-1 h-1 bg-[#C4572A] rounded-full shrink-0" />
                 <span className="text-[12px] text-[#6B6760]">{detail}</span>
               </div>
             ))}
@@ -183,19 +193,19 @@ export default function ProductPage({ params }: Props) {
         {accordionItems.map(({ key, label }) => (
           <div key={key} className="border-b border-[#E8E8E8]">
             <button
-              className="flex items-center justify-between w-full px-24 text-left hover:bg-[#F7F7F7] transition-colors"
+              className="flex items-center justify-between w-full px-4 md:px-24 text-left hover:bg-[#F7F7F7] transition-colors"
               style={{ height: 56 }}
               onClick={() => setOpenAccordion(openAccordion === key ? null : key)}
             >
               <span className="text-[11px] font-semibold tracking-[2px] text-[#1A1A18]">{label}</span>
               {openAccordion === key ? (
-                <Minus size={16} className="text-[#1A1A18]" strokeWidth={1.5} />
+                <Minus size={16} className="text-[#1A1A18] shrink-0" strokeWidth={1.5} />
               ) : (
-                <Plus size={16} className="text-[#1A1A18]" strokeWidth={1.5} />
+                <Plus size={16} className="text-[#1A1A18] shrink-0" strokeWidth={1.5} />
               )}
             </button>
             {openAccordion === key && (
-              <div className="px-24 pb-6 pt-2">
+              <div className="px-4 md:px-24 pb-6 pt-2">
                 <p className="text-[13px] text-[#6B6760] leading-[1.8]">{accordionContent[key]}</p>
               </div>
             )}
@@ -205,15 +215,15 @@ export default function ProductPage({ params }: Props) {
 
       {/* YOU MAY ALSO LIKE */}
       <section className="bg-white border-b border-[#E8E8E8]">
-        <div className="flex items-center justify-between px-24 py-6">
+        <div className="flex items-center justify-between px-4 md:px-24 py-5 md:py-6">
           <span className="text-[11px] font-bold tracking-[3px] text-[#1A1A18]">YOU MAY ALSO LIKE</span>
-          <Link href="/collections/totes" className="text-[13px] text-[#A8A49E] hover:text-[#1A1A18] transition-colors">
+          <Link href="/collections/totes" className="text-[12px] md:text-[13px] text-[#A8A49E] hover:text-[#1A1A18] transition-colors">
             Shop all
           </Link>
         </div>
-        <div className="grid grid-cols-4 gap-px bg-[#E8E8E8]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E8E8E8]">
           {related.map((p) => (
-            <ProductCard key={p.slug} product={p} />
+            <ProductCard key={p.slug} product={p} sizes="(max-width: 768px) 50vw, 25vw" />
           ))}
         </div>
       </section>
