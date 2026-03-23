@@ -4,6 +4,7 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import ProductCard from '@/components/ProductCard'
 import DraggableProductStrip from '@/components/DraggableProductStrip'
+import CommunityTicker from '@/components/CommunityTicker'
 import { products, geometricProducts } from '@/lib/products'
 
 const categoryRows = [
@@ -49,23 +50,6 @@ const categoryRows = [
   ],
 ]
 
-const community = [
-  {
-    handle: '@berguzar_k',
-    quote: '"This bag goes with everything. The print is even better in person."',
-    image: '/products/GoltDesign_74fef74963fd98ec29fe33d11559ad5d_hexDCDCDC.jpeg',
-  },
-  {
-    handle: '@zeynep.style',
-    quote: '"Bought the crossbody in the geometric print — quality is incredible."',
-    image: '/products/GoltDesign_f426743542edd94c52a6e0a9e54e4645_hexDCDCDC.jpeg',
-  },
-  {
-    handle: '@merve.bags',
-    quote: '"Handmade and it really shows. My third Golt bag now."',
-    image: '/products/GoltDesign_4401cca141344c83170d70e1fad8fc65_hexDCDCDC.jpeg',
-  },
-]
 
 export default function Home() {
   return (
@@ -196,29 +180,8 @@ export default function Home() {
         </p>
       </section>
 
-      {/* FROM THE COMMUNITY */}
-      <div
-        className="flex border-t border-b border-[#E8E8E8] bg-white overflow-hidden"
-        style={{ height: 240 }}
-      >
-        <div className="flex flex-col justify-center gap-1.5 px-8 border-r border-[#E8E8E8] shrink-0 w-[200px]">
-          <span className="text-[10px] font-bold tracking-[3px] text-[#A8A49E]">FROM THE</span>
-          <span className="text-[10px] font-bold tracking-[3px] text-[#A8A49E]">COMMUNITY</span>
-        </div>
-        {community.map((item, i) => (
-          <div key={i} className="flex border-r border-[#E8E8E8] last:border-r-0">
-            <div className="relative shrink-0 border-r border-[#E8E8E8]" style={{ width: 200 }}>
-              <Image src={item.image} alt={item.handle} fill className="object-cover" />
-            </div>
-            <div className="flex flex-col justify-center gap-2.5 px-10 py-8 shrink-0" style={{ width: 360 }}>
-              <p className="text-[11px] text-[#A8A49E]">{item.handle}</p>
-              <p className="text-[16px] font-semibold text-[#1A1A18] leading-[1.5]" style={{ maxWidth: 280 }}>
-                {item.quote}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+      {/* FROM THE COMMUNITY — auto-scrolling ticker */}
+      <CommunityTicker />
 
       <Footer />
     </main>

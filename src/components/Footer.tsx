@@ -3,16 +3,6 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <>
-      {/* Wordmark */}
-      <div className="border-b border-[#E8E8E8] bg-white overflow-hidden pt-8">
-        <p
-          className="text-[#1A1A18] font-bold select-none leading-[0.69] whitespace-nowrap px-0"
-          style={{ fontSize: 'clamp(80px, 18vw, 262px)', letterSpacing: '-24px' }}
-        >
-          GOLT DESIGN
-        </p>
-      </div>
-
       {/* Footer columns */}
       <footer className="flex justify-between items-start px-24 py-12 border-t border-[#E8E8E8] bg-white">
         <div className="flex flex-col gap-5 w-[280px]">
@@ -58,6 +48,16 @@ export default function Footer() {
 
       <div className="text-center py-4 border-t border-[#E8E8E8] bg-white">
         <p className="text-[11px] text-[#A8A49E] tracking-[1px]">© 2026 GOLT. ALL RIGHTS RESERVED.</p>
+      </div>
+
+      {/* GOLT DESIGN wordmark — page signature, sits below footer */}
+      <div className="border-t border-[#E8E8E8] bg-white overflow-hidden pt-8">
+        <p
+          className="text-[#1A1A18] font-bold select-none leading-[0.69] whitespace-nowrap"
+          style={{ fontSize: 'clamp(80px, 18vw, 262px)', letterSpacing: '-24px' }}
+        >
+          GOLT DESIGN
+        </p>
       </div>
     </>
   )
