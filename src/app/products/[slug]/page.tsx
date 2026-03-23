@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { use, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -11,7 +11,7 @@ import ProductCard from '@/components/ProductCard'
 import { getProduct, products } from '@/lib/products'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 const accordionItems = [
@@ -24,13 +24,16 @@ const shippingText =
   'Free shipping on orders over 500 ₺. Standard delivery 3–5 business days. Express available at checkout. Returns accepted within 14 days — items must be unused and in original condition.'
 
 export default function ProductPage({ params }: Props) {
-  const product = getProduct(params.slug)
-  if (!product) notFound()
+  const { slug } = use(params)
 
+  // All hooks must run before any conditional throw
   const [activeThumb, setActiveThumb] = useState(0)
   const [openAccordion, setOpenAccordion] = useState<string | null>('dimensions')
   const [added, setAdded] = useState(false)
   const [wishlisted, setWishlisted] = useState(false)
+
+  const product = getProduct(slug)
+  if (!product) notFound()
 
   const allImages = [product.image, ...(product.thumbs ?? [])]
   const related = products.filter((p) => p.slug !== product.slug).slice(0, 4)

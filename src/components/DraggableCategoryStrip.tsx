@@ -48,6 +48,46 @@ export default function DraggableCategoryStrip({ items }: Props) {
     }
   }, [])
 
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+
+    let touchStartX = 0
+    let touchStartY = 0
+    let touchScrollStart = 0
+    let directionLocked: 'h' | 'v' | null = null
+
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX
+      touchStartY = e.touches[0].clientY
+      touchScrollStart = el.scrollLeft
+      directionLocked = null
+      didDrag.current = false
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      const dx = e.touches[0].clientX - touchStartX
+      const dy = e.touches[0].clientY - touchStartY
+
+      if (!directionLocked) {
+        directionLocked = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v'
+      }
+
+      if (directionLocked === 'v') return
+
+      e.preventDefault()
+      if (Math.abs(dx) > 5) didDrag.current = true
+      el.scrollLeft = touchScrollStart - dx
+    }
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchmove', onTouchMove, { passive: false })
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchmove', onTouchMove)
+    }
+  }, [])
+
   const onMouseDown = (e: React.MouseEvent) => {
     if (!trackRef.current) return
     isDragging.current = true
@@ -67,7 +107,7 @@ export default function DraggableCategoryStrip({ items }: Props) {
       className={`flex overflow-x-auto scrollbar-hide gap-px bg-[#E8E8E8] border-b border-[#E8E8E8] md:grid md:grid-cols-3 select-none ${
         dragging ? 'cursor-grabbing' : 'cursor-grab md:cursor-auto'
       }`}
-      style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-x' }}
+      style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-y' }}
       onMouseDown={onMouseDown}
       onClickCapture={onClickCapture}
       onDragStart={(e) => e.preventDefault()}

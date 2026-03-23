@@ -88,6 +88,50 @@ export default function DraggableProductStrip({ products, label, shopAllHref }: 
     }
   }, [checkInfinite])
 
+  // Touch handlers — added via native addEventListener with { passive: false }
+  // so we can preventDefault on horizontal swipes while still allowing
+  // vertical swipes to scroll the page
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+
+    let touchStartX = 0
+    let touchStartY = 0
+    let touchScrollStart = 0
+    let directionLocked: 'h' | 'v' | null = null
+
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX
+      touchStartY = e.touches[0].clientY
+      touchScrollStart = el.scrollLeft
+      directionLocked = null
+      didDrag.current = false
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      const dx = e.touches[0].clientX - touchStartX
+      const dy = e.touches[0].clientY - touchStartY
+
+      if (!directionLocked) {
+        directionLocked = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v'
+      }
+
+      if (directionLocked === 'v') return // let page scroll happen
+
+      e.preventDefault()
+      if (Math.abs(dx) > 5) didDrag.current = true
+      el.scrollLeft = touchScrollStart - dx
+      checkInfinite(el)
+    }
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchmove', onTouchMove, { passive: false })
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchmove', onTouchMove)
+    }
+  }, [checkInfinite])
+
   const onMouseDown = (e: React.MouseEvent) => {
     if (!trackRef.current) return
     isDragging.current = true
@@ -99,12 +143,6 @@ export default function DraggableProductStrip({ products, label, shopAllHref }: 
 
   const onClickCapture = (e: React.MouseEvent) => {
     if (didDrag.current) e.preventDefault()
-  }
-
-  // Native touch scroll on mobile fires scroll events — handles infinite loop
-  const handleScroll = () => {
-    if (!trackRef.current || isDragging.current) return
-    checkInfinite(trackRef.current)
   }
 
   const items = Array.from({ length: REPEAT }, () => products).flat()
@@ -123,11 +161,10 @@ export default function DraggableProductStrip({ products, label, shopAllHref }: 
         className={`flex overflow-x-auto scrollbar-hide gap-px bg-[#E8E8E8] select-none ${
           dragging ? 'cursor-grabbing' : 'cursor-grab'
         }`}
-        style={{ scrollBehavior: 'auto', touchAction: 'pan-x' }}
+        style={{ scrollBehavior: 'auto', touchAction: 'pan-y' }}
         onMouseDown={onMouseDown}
         onClickCapture={onClickCapture}
         onDragStart={(e) => e.preventDefault()}
-        onScroll={handleScroll}
       >
         {items.map((p, i) => (
           <div key={`${p.slug}-${i}`} className="shrink-0" style={{ width: cardWidth }}>
