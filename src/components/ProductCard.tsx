@@ -29,6 +29,7 @@ export default function ProductCard({ product, priority, sizes = '25vw' }: Produ
           src={product.image}
           alt={product.name}
           fill
+          draggable={false}
           sizes={sizes}
           className={`object-cover transition-opacity duration-300 ${hovered && hasAlt ? 'opacity-0' : 'opacity-100'}`}
           priority={priority}
@@ -40,6 +41,7 @@ export default function ProductCard({ product, priority, sizes = '25vw' }: Produ
             src={altImage}
             alt={product.name}
             fill
+            draggable={false}
             sizes={sizes}
             className={`object-cover transition-opacity duration-300 absolute inset-0 ${hovered ? 'opacity-100' : 'opacity-0'}`}
           />

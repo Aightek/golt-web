@@ -34,17 +34,20 @@ export default function DraggableProductStrip({
       trackRef.current.scrollLeft = scrollStart.current - dist
     }
 
-    const handleMouseUp = () => {
+    const cancelDrag = () => {
       if (!isDragging.current) return
       isDragging.current = false
       setDragging(false)
     }
 
     window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('mouseup', cancelDrag)
+    // If pointer leaves browser window while dragging (e.g. alt+tab), release
+    window.addEventListener('blur', cancelDrag)
     return () => {
       window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseup', handleMouseUp)
+      window.removeEventListener('mouseup', cancelDrag)
+      window.removeEventListener('blur', cancelDrag)
     }
   }, [])
 
@@ -78,6 +81,7 @@ export default function DraggableProductStrip({
         style={{ scrollBehavior: 'auto' }}
         onMouseDown={onMouseDown}
         onClickCapture={onClickCapture}
+        onDragStart={(e) => e.preventDefault()}
       >
         {products.map((p) => (
           <div key={p.slug} className="shrink-0" style={{ width: cardWidth }}>

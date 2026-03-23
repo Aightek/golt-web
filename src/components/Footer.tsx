@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import WordmarkBanner from './WordmarkBanner'
 
 export default function Footer() {
   return (
@@ -51,14 +52,7 @@ export default function Footer() {
       </div>
 
       {/* GOLT DESIGN wordmark — page signature, sits below footer */}
-      <div className="border-t border-[#E8E8E8] bg-white overflow-hidden pt-8">
-        <p
-          className="text-[#1A1A18] font-bold select-none leading-[0.69] whitespace-nowrap"
-          style={{ fontSize: 'clamp(80px, 18vw, 262px)', letterSpacing: '-24px' }}
-        >
-          GOLT DESIGN
-        </p>
-      </div>
+      <WordmarkBanner />
     </>
   )
 }
