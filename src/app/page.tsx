@@ -106,12 +106,20 @@ export default function Home() {
       />
 
       {/* Category row 1
-          Mobile:  full-width stacked cards (1 col)
-          Desktop: 3-column grid                     */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E8E8E8] border-b border-[#E8E8E8]">
+          Mobile:  horizontal drag-scroll strip (3 cards, no loop)
+          Desktop: 3-column grid                                    */}
+      <div
+        className="flex overflow-x-auto scrollbar-hide gap-px bg-[#E8E8E8] border-b border-[#E8E8E8] md:grid md:grid-cols-3"
+        style={{ scrollSnapType: 'x mandatory' }}
+      >
         {categoryRows[0].map((col) => (
-          <Link key={col.label} href={col.href} className="group bg-white block">
-            <div className="relative overflow-hidden h-[280px] md:h-[480px]">
+          <Link
+            key={col.label}
+            href={col.href}
+            className="group bg-white block shrink-0 w-[72vw] md:w-auto"
+            style={{ scrollSnapAlign: 'start' }}
+          >
+            <div className="relative overflow-hidden aspect-[4/5]">
               <Image src={col.image} alt={col.label} fill className="object-cover" />
             </div>
             <div className="flex items-center justify-between px-4 py-3 border-t border-[#E8E8E8]">
@@ -133,10 +141,18 @@ export default function Home() {
       />
 
       {/* Category row 2 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E8E8E8] border-b border-[#E8E8E8]">
+      <div
+        className="flex overflow-x-auto scrollbar-hide gap-px bg-[#E8E8E8] border-b border-[#E8E8E8] md:grid md:grid-cols-3"
+        style={{ scrollSnapType: 'x mandatory' }}
+      >
         {categoryRows[1].map((col) => (
-          <Link key={col.label} href={col.href} className="group bg-white block">
-            <div className="relative overflow-hidden h-[280px] md:h-[480px]">
+          <Link
+            key={col.label}
+            href={col.href}
+            className="group bg-white block shrink-0 w-[72vw] md:w-auto"
+            style={{ scrollSnapAlign: 'start' }}
+          >
+            <div className="relative overflow-hidden aspect-[4/5]">
               <Image src={col.image} alt={col.label} fill className="object-cover" />
             </div>
             <div className="flex items-center justify-between px-4 py-3 border-t border-[#E8E8E8]">

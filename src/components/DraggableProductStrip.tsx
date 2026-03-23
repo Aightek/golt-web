@@ -15,9 +15,10 @@ interface Props {
 
 function getCardWidth() {
   const vw = window.innerWidth
-  if (vw <= 768) return Math.round(vw * 0.8)   // mobile/small tablet: 1 card + right peek
-  if (vw <= 1024) return Math.round(vw / 3)     // tablet: ~3 cards visible
-  return 340                                     // desktop
+  if (vw <= 640) return Math.round(vw * 0.8)    // mobile: 1 card + right peek
+  if (vw <= 1024) return Math.round(vw / 3)      // tablet: ~3 cards visible
+  if (vw <= 1440) return Math.round(vw / 4)      // desktop: ~4 cards visible
+  return Math.round(vw / 5)                       // large desktop: ~5 cards visible
 }
 
 export default function DraggableProductStrip({ products, label, shopAllHref }: Props) {
@@ -130,7 +131,7 @@ export default function DraggableProductStrip({ products, label, shopAllHref }: 
       >
         {items.map((p, i) => (
           <div key={`${p.slug}-${i}`} className="shrink-0" style={{ width: cardWidth }}>
-            <ProductCard product={p} sizes={`${cardWidth}px`} />
+            <ProductCard product={p} sizes="(max-width: 640px) 80vw, (max-width: 1024px) 33vw, (max-width: 1440px) 25vw, 20vw" />
           </div>
         ))}
       </div>
