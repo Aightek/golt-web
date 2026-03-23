@@ -3,7 +3,8 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import ProductCard from '@/components/ProductCard'
-import { newArrivals, geometricProducts } from '@/lib/products'
+import DraggableProductStrip from '@/components/DraggableProductStrip'
+import { products, geometricProducts } from '@/lib/products'
 
 const categoryRows = [
   [
@@ -78,7 +79,7 @@ export default function Home() {
             src="/products/GoltDesign_74fef74963fd98ec29fe33d11559ad5d_hexDCDCDC.jpeg"
             alt="Luna Çizgi & Boşluk"
             fill
-            className="object-contain p-8"
+            className="object-cover"
             priority
           />
         </div>
@@ -87,7 +88,7 @@ export default function Home() {
             src="/products/GoltDesign_c6efdb1b38d0fec9d1fc1e901ba4389e_hexDCDCDC.jpeg"
             alt="Luna Çizgi"
             fill
-            className="object-contain p-8"
+            className="object-cover"
             priority
           />
         </div>
@@ -114,20 +115,13 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* NEW ARRIVALS */}
-      <section className="bg-white border-b border-[#E8E8E8]">
-        <div className="flex items-center justify-between px-24 py-6">
-          <span className="text-[11px] font-bold tracking-[3px] text-[#1A1A18]">NEW ARRIVALS</span>
-          <Link href="/collections/totes" className="text-[13px] text-[#A8A49E] hover:text-[#1A1A18] transition-colors">
-            Shop all
-          </Link>
-        </div>
-        <div className="grid grid-cols-4 gap-px bg-[#E8E8E8]">
-          {newArrivals.map((p, i) => (
-            <ProductCard key={p.slug} product={p} priority={i < 2} />
-          ))}
-        </div>
-      </section>
+      {/* NEW ARRIVALS — draggable horizontal strip */}
+      <DraggableProductStrip
+        products={products}
+        label="NEW ARRIVALS"
+        shopAllHref="/collections/totes"
+        cardWidth={340}
+      />
 
       {/* Category row 1 */}
       <div className="grid grid-cols-3 gap-px bg-[#E8E8E8] border-b border-[#E8E8E8]">
@@ -138,7 +132,7 @@ export default function Home() {
                 src={col.image}
                 alt={col.label}
                 fill
-                className="object-contain p-8 transition-transform duration-500 group-hover:scale-105"
+                className="object-cover"
               />
             </div>
             <div className="flex items-center justify-between px-4 py-3 border-t border-[#E8E8E8]">
@@ -176,7 +170,7 @@ export default function Home() {
                 src={col.image}
                 alt={col.label}
                 fill
-                className="object-contain p-8 transition-transform duration-500 group-hover:scale-105"
+                className="object-cover"
               />
             </div>
             <div className="flex items-center justify-between px-4 py-3 border-t border-[#E8E8E8]">
@@ -214,7 +208,7 @@ export default function Home() {
         {community.map((item, i) => (
           <div key={i} className="flex border-r border-[#E8E8E8] last:border-r-0">
             <div className="relative shrink-0 border-r border-[#E8E8E8]" style={{ width: 200 }}>
-              <Image src={item.image} alt={item.handle} fill className="object-contain p-4" />
+              <Image src={item.image} alt={item.handle} fill className="object-cover" />
             </div>
             <div className="flex flex-col justify-center gap-2.5 px-10 py-8 shrink-0" style={{ width: 360 }}>
               <p className="text-[11px] text-[#A8A49E]">{item.handle}</p>
