@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -15,13 +15,6 @@ interface Props {
   items: CategoryItem[]
 }
 
-function getCardWidth() {
-  const vw = window.innerWidth
-  if (vw <= 640) return Math.round(vw * 0.72)
-  if (vw <= 1024) return Math.round(vw / 3)
-  return 0 // desktop: grid handles sizing, JS not used
-}
-
 export default function DraggableCategoryStrip({ items }: Props) {
   const trackRef = useRef<HTMLDivElement>(null)
   const isDragging = useRef(false)
@@ -29,14 +22,6 @@ export default function DraggableCategoryStrip({ items }: Props) {
   const scrollStart = useRef(0)
   const didDrag = useRef(false)
   const [dragging, setDragging] = useState(false)
-  const [cardWidth, setCardWidth] = useState(0)
-
-  useEffect(() => {
-    const update = () => setCardWidth(getCardWidth())
-    update()
-    window.addEventListener('resize', update)
-    return () => window.removeEventListener('resize', update)
-  }, [])
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -76,15 +61,13 @@ export default function DraggableCategoryStrip({ items }: Props) {
     if (didDrag.current) e.preventDefault()
   }
 
-  const isMobile = cardWidth > 0
-
   return (
     <div
       ref={trackRef}
       className={`flex overflow-x-auto scrollbar-hide gap-px bg-[#E8E8E8] border-b border-[#E8E8E8] md:grid md:grid-cols-3 select-none ${
-        isMobile ? (dragging ? 'cursor-grabbing' : 'cursor-grab') : ''
+        dragging ? 'cursor-grabbing' : 'cursor-grab md:cursor-auto'
       }`}
-      style={{ scrollSnapType: isMobile ? 'x mandatory' : 'none', touchAction: 'pan-x' }}
+      style={{ scrollSnapType: 'x mandatory', touchAction: 'pan-x' }}
       onMouseDown={onMouseDown}
       onClickCapture={onClickCapture}
       onDragStart={(e) => e.preventDefault()}
@@ -93,11 +76,11 @@ export default function DraggableCategoryStrip({ items }: Props) {
         <Link
           key={col.label}
           href={col.href}
-          className="group bg-white block shrink-0 md:shrink md:w-auto"
-          style={isMobile ? { width: cardWidth, scrollSnapAlign: 'start' } : {}}
+          className="group bg-white block shrink-0 w-[72vw] md:w-auto"
+          style={{ scrollSnapAlign: 'start' }}
         >
           <div className="relative overflow-hidden aspect-[4/5]">
-            <Image src={col.image} alt={col.label} fill className="object-cover" draggable={false} sizes="(max-width: 640px) 72vw, (max-width: 1024px) 33vw, 33vw" />
+            <Image src={col.image} alt={col.label} fill className="object-cover" draggable={false} sizes="(max-width: 640px) 72vw, 33vw" />
           </div>
           <div className="flex items-center justify-between px-4 py-3 border-t border-[#E8E8E8]">
             <div>
