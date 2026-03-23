@@ -2,7 +2,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
-import ProductCard from '@/components/ProductCard'
 import DraggableProductStrip from '@/components/DraggableProductStrip'
 import CommunityTicker from '@/components/CommunityTicker'
 import { products, geometricProducts } from '@/lib/products'
@@ -50,14 +49,13 @@ const categoryRows = [
   ],
 ]
 
-
 export default function Home() {
   return (
     <main>
       <Nav />
 
-      {/* Hero — 50/50 split */}
-      <section className="flex overflow-hidden bg-[#F7F7F7]" style={{ height: 620 }}>
+      {/* Hero — 50/50 split, stacks vertically on mobile */}
+      <section className="flex flex-col md:flex-row overflow-hidden bg-[#F7F7F7] h-[360px] md:h-[620px]">
         <div className="relative flex-1 overflow-hidden">
           <Image
             src="/products/GoltDesign_74fef74963fd98ec29fe33d11559ad5d_hexDCDCDC.jpeg"
@@ -67,7 +65,7 @@ export default function Home() {
             priority
           />
         </div>
-        <div className="relative flex-1 overflow-hidden border-l border-[#E8E8E8]">
+        <div className="relative flex-1 overflow-hidden border-t md:border-t-0 md:border-l border-[#E8E8E8]">
           <Image
             src="/products/GoltDesign_c6efdb1b38d0fec9d1fc1e901ba4389e_hexDCDCDC.jpeg"
             alt="Luna Çizgi"
@@ -78,10 +76,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Shop strip */}
-      <div className="flex items-center justify-between px-24 py-[14px] border-b border-[#E8E8E8] bg-white">
-        <span className="text-[11px] font-bold tracking-[3px] text-[#1A1A18]">SHOP</span>
-        <div className="flex items-center gap-8">
+      {/* Shop strip — scrollable on mobile */}
+      <div className="flex overflow-x-auto scrollbar-hide items-center gap-6 md:gap-8 px-4 md:px-24 py-[14px] border-b border-[#E8E8E8] bg-white whitespace-nowrap">
+        <span className="text-[11px] font-bold tracking-[3px] text-[#1A1A18] shrink-0">SHOP</span>
+        <div className="flex items-center gap-6 md:gap-8">
           {[
             { label: 'Totes', href: '/collections/totes' },
             { label: 'Crossbody', href: '/collections/crossbody' },
@@ -89,29 +87,28 @@ export default function Home() {
             { label: 'Solid Canvas', href: '/collections/solid-canvas' },
             { label: 'New Arrivals', href: '/collections/totes' },
           ].map(({ label, href }) => (
-            <Link key={label} href={href} className="text-[13px] text-[#6B6760] hover:text-[#1A1A18] transition-colors">
+            <Link key={label} href={href} className="text-[13px] text-[#6B6760] hover:text-[#1A1A18] transition-colors shrink-0">
               {label}
             </Link>
           ))}
         </div>
-        <Link href="/collections/totes" className="text-[13px] font-medium text-[#1A1A18] hover:text-[#C4572A] transition-colors">
+        <Link href="/collections/totes" className="text-[13px] font-medium text-[#1A1A18] hover:text-[#C4572A] transition-colors shrink-0 ml-auto pl-6">
           All bags →
         </Link>
       </div>
 
-      {/* NEW ARRIVALS — draggable horizontal strip */}
+      {/* NEW ARRIVALS — infinite draggable strip */}
       <DraggableProductStrip
         products={products}
         label="NEW ARRIVALS"
         shopAllHref="/collections/totes"
-        cardWidth={340}
       />
 
-      {/* Category row 1 */}
-      <div className="grid grid-cols-3 gap-px bg-[#E8E8E8] border-b border-[#E8E8E8]">
+      {/* Category row 1 — 1 col on mobile, 3 on tablet+ */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E8E8E8] border-b border-[#E8E8E8]">
         {categoryRows[0].map((col) => (
           <Link key={col.label} href={col.href} className="group bg-white block">
-            <div className="relative overflow-hidden" style={{ height: 480 }}>
+            <div className="relative overflow-hidden h-48 md:h-[480px]">
               <Image
                 src={col.image}
                 alt={col.label}
@@ -130,26 +127,18 @@ export default function Home() {
         ))}
       </div>
 
-      {/* GEOMETRIC PRINTS */}
-      <section className="bg-white border-b border-[#E8E8E8]">
-        <div className="flex items-center justify-between px-24 py-6">
-          <span className="text-[11px] font-bold tracking-[3px] text-[#1A1A18]">GEOMETRIC PRINTS</span>
-          <Link href="/collections/geometric-prints" className="text-[13px] text-[#A8A49E] hover:text-[#1A1A18] transition-colors">
-            Shop all
-          </Link>
-        </div>
-        <div className="grid grid-cols-4 gap-px bg-[#E8E8E8]">
-          {geometricProducts.map((p) => (
-            <ProductCard key={p.slug} product={p} />
-          ))}
-        </div>
-      </section>
+      {/* GEOMETRIC PRINTS — infinite draggable strip */}
+      <DraggableProductStrip
+        products={geometricProducts}
+        label="GEOMETRIC PRINTS"
+        shopAllHref="/collections/geometric-prints"
+      />
 
-      {/* Category row 2 */}
-      <div className="grid grid-cols-3 gap-px bg-[#E8E8E8] border-b border-[#E8E8E8]">
+      {/* Category row 2 — 1 col on mobile, 3 on tablet+ */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#E8E8E8] border-b border-[#E8E8E8]">
         {categoryRows[1].map((col) => (
           <Link key={col.label} href={col.href} className="group bg-white block">
-            <div className="relative overflow-hidden" style={{ height: 480 }}>
+            <div className="relative overflow-hidden h-48 md:h-[480px]">
               <Image
                 src={col.image}
                 alt={col.label}
@@ -169,10 +158,10 @@ export default function Home() {
       </div>
 
       {/* Typographic statement */}
-      <section className="bg-white border-b border-[#E8E8E8] px-24 py-24">
+      <section className="bg-white border-b border-[#E8E8E8] px-4 md:px-24 py-12 md:py-24">
         <p
           className="font-bold text-[#1A1A18] leading-[0.9]"
-          style={{ fontSize: 'clamp(40px, 6vw, 80px)', letterSpacing: '-3px' }}
+          style={{ fontSize: 'clamp(36px, 6vw, 80px)', letterSpacing: '-2px' }}
         >
           Made by hand.
           <br />
@@ -180,7 +169,7 @@ export default function Home() {
         </p>
       </section>
 
-      {/* FROM THE COMMUNITY — auto-scrolling ticker */}
+      {/* FROM THE COMMUNITY */}
       <CommunityTicker />
 
       <Footer />

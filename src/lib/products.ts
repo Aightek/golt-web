@@ -164,4 +164,4 @@ export function getCollection(slug: string) {
 
 export const newArrivals = products.filter((p) => p.isNew).slice(0, 4)
 export const featuredProducts = products.slice(0, 4)
-export const geometricProducts = products.filter((p) => p.categorySlug === 'geometric-prints').slice(0, 4)
+export const geometricProducts = products.filter((p) => p.categorySlug === 'geometric-prints')
