@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import DraggableProductStrip from '@/components/DraggableProductStrip'
+import DraggableCategoryStrip from '@/components/DraggableCategoryStrip'
 import CommunityTicker from '@/components/CommunityTicker'
 import { products, geometricProducts } from '@/lib/products'
 
@@ -105,33 +106,8 @@ export default function Home() {
         shopAllHref="/collections/totes"
       />
 
-      {/* Category row 1
-          Mobile:  horizontal drag-scroll strip (3 cards, no loop)
-          Desktop: 3-column grid                                    */}
-      <div
-        className="flex overflow-x-auto scrollbar-hide gap-px bg-[#E8E8E8] border-b border-[#E8E8E8] md:grid md:grid-cols-3"
-        style={{ scrollSnapType: 'x mandatory' }}
-      >
-        {categoryRows[0].map((col) => (
-          <Link
-            key={col.label}
-            href={col.href}
-            className="group bg-white block shrink-0 w-[72vw] md:w-auto"
-            style={{ scrollSnapAlign: 'start' }}
-          >
-            <div className="relative overflow-hidden aspect-[4/5]">
-              <Image src={col.image} alt={col.label} fill className="object-cover" />
-            </div>
-            <div className="flex items-center justify-between px-4 py-3 border-t border-[#E8E8E8]">
-              <div>
-                <p className="text-[11px] font-bold tracking-[2px] text-[#1A1A18]">{col.label}</p>
-                <p className="text-[12px] text-[#A8A49E] mt-0.5">{col.sub}</p>
-              </div>
-              <span className="text-[#A8A49E] group-hover:text-[#1A1A18] transition-colors">→</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      {/* Category row 1 — draggable on mobile, 3-col grid on desktop */}
+      <DraggableCategoryStrip items={categoryRows[0]} />
 
       {/* GEOMETRIC PRINTS — infinite draggable strip */}
       <DraggableProductStrip
@@ -140,31 +116,8 @@ export default function Home() {
         shopAllHref="/collections/geometric-prints"
       />
 
-      {/* Category row 2 */}
-      <div
-        className="flex overflow-x-auto scrollbar-hide gap-px bg-[#E8E8E8] border-b border-[#E8E8E8] md:grid md:grid-cols-3"
-        style={{ scrollSnapType: 'x mandatory' }}
-      >
-        {categoryRows[1].map((col) => (
-          <Link
-            key={col.label}
-            href={col.href}
-            className="group bg-white block shrink-0 w-[72vw] md:w-auto"
-            style={{ scrollSnapAlign: 'start' }}
-          >
-            <div className="relative overflow-hidden aspect-[4/5]">
-              <Image src={col.image} alt={col.label} fill className="object-cover" />
-            </div>
-            <div className="flex items-center justify-between px-4 py-3 border-t border-[#E8E8E8]">
-              <div>
-                <p className="text-[11px] font-bold tracking-[2px] text-[#1A1A18]">{col.label}</p>
-                <p className="text-[12px] text-[#A8A49E] mt-0.5">{col.sub}</p>
-              </div>
-              <span className="text-[#A8A49E] group-hover:text-[#1A1A18] transition-colors">→</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      {/* Category row 2 — draggable on mobile, 3-col grid on desktop */}
+      <DraggableCategoryStrip items={categoryRows[1]} />
 
       {/* Typographic statement */}
       <section className="bg-white border-b border-[#E8E8E8] px-4 md:px-24 py-12 md:py-24">
