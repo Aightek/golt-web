@@ -45,19 +45,16 @@ const items = [
   },
 ]
 
-// Duplicate for seamless loop
 const track = [...items, ...items]
 
 export default function CommunityTicker() {
   return (
-    <div
-      className="border-t border-b border-[#E8E8E8] bg-white overflow-hidden"
-      style={{ height: 240 }}
-    >
-      {/* Label */}
+    <div className="border-t border-b border-[#E8E8E8] bg-white overflow-hidden h-[200px] md:h-[240px]">
       <div className="flex h-full">
+
+        {/* "FROM THE COMMUNITY" label — hidden on mobile */}
         <div
-          className="flex flex-col justify-center gap-1.5 px-8 border-r border-[#E8E8E8] shrink-0 bg-white z-10"
+          className="hidden md:flex flex-col justify-center gap-1.5 px-8 border-r border-[#E8E8E8] shrink-0 bg-white z-10"
           style={{ width: 160 }}
         >
           <span className="text-[10px] font-bold tracking-[3px] text-[#A8A49E]">FROM THE</span>
@@ -72,18 +69,18 @@ export default function CommunityTicker() {
                 <div
                   key={i}
                   className="relative shrink-0 border-r border-[#E8E8E8]"
-                  style={{ width: 200 }}
+                  style={{ width: 160 }}
                 >
                   <Image src={item.src} alt={item.alt} fill className="object-cover" />
                 </div>
               ) : (
                 <div
                   key={i}
-                  className="flex flex-col justify-center gap-2 px-10 py-8 shrink-0 border-r border-[#E8E8E8]"
-                  style={{ width: 340 }}
+                  className="flex flex-col justify-center gap-2 px-6 md:px-10 py-6 md:py-8 shrink-0 border-r border-[#E8E8E8]"
+                  style={{ width: 280 }}
                 >
                   <p className="text-[11px] text-[#A8A49E] tracking-[0.5px]">{item.handle}</p>
-                  <p className="text-[15px] font-semibold text-[#1A1A18] leading-[1.5]">
+                  <p className="text-[13px] md:text-[15px] font-semibold text-[#1A1A18] leading-[1.5]">
                     {item.text}
                   </p>
                 </div>

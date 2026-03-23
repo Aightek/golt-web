@@ -5,7 +5,6 @@ import Link from 'next/link'
 import ProductCard from './ProductCard'
 import type { Product } from '@/lib/products'
 
-// Items are repeated this many times for the infinite loop
 const REPEAT = 4
 
 interface Props {
@@ -16,9 +15,9 @@ interface Props {
 
 function getCardWidth() {
   const vw = window.innerWidth
-  if (vw <= 396) return Math.round(vw / 2)   // mobile:  ~1 card + half peeks each side
-  if (vw <= 768) return Math.round(vw / 4)   // tablet:  ~3 cards + half peeks each side
-  return 340                                  // desktop: ~4 cards
+  if (vw <= 768) return Math.round(vw * 0.8)   // mobile/small tablet: 1 card + right peek
+  if (vw <= 1024) return Math.round(vw / 3)     // tablet: ~3 cards visible
+  return 340                                     // desktop
 }
 
 export default function DraggableProductStrip({ products, label, shopAllHref }: Props) {
@@ -30,7 +29,6 @@ export default function DraggableProductStrip({ products, label, shopAllHref }: 
   const [dragging, setDragging] = useState(false)
   const [cardWidth, setCardWidth] = useState(340)
 
-  // Responsive card width
   useEffect(() => {
     const update = () => setCardWidth(getCardWidth())
     update()
@@ -38,32 +36,31 @@ export default function DraggableProductStrip({ products, label, shopAllHref }: 
     return () => window.removeEventListener('resize', update)
   }, [])
 
-  // On card width change: reset scroll to second set + half-card offset
-  // so the user sees a half-card peeking in from the left (signals "there's more")
+  // On card width change: jump to the start of the second set (flush left, no left peek)
+  // Right peek happens naturally since cardWidth < viewport
   useEffect(() => {
     const el = trackRef.current
     if (!el || el.scrollWidth === 0) return
     const oneSetWidth = el.scrollWidth / REPEAT
-    el.scrollLeft = oneSetWidth + cardWidth / 2
+    el.scrollLeft = oneSetWidth
   }, [cardWidth])
 
-  // Teleport to equivalent position in the middle sets when approaching edges.
-  // Uses actual scrollWidth so no manual calculation needed.
-  // Also adjusts scrollStart when dragging so the drag anchor stays correct.
+  // Teleport to equivalent position in middle sets when approaching edges
   const checkInfinite = useCallback((el: HTMLDivElement) => {
     const oneSetWidth = el.scrollWidth / REPEAT
     if (oneSetWidth <= 0) return
     const sl = el.scrollLeft
     if (sl < oneSetWidth) {
-      el.scrollLeft = sl + oneSetWidth
-      if (isDragging.current) scrollStart.current += oneSetWidth
+      const delta = oneSetWidth
+      el.scrollLeft = sl + delta
+      if (isDragging.current) scrollStart.current += delta
     } else if (sl >= oneSetWidth * (REPEAT - 1)) {
-      el.scrollLeft = sl - oneSetWidth
-      if (isDragging.current) scrollStart.current -= oneSetWidth
+      const delta = oneSetWidth
+      el.scrollLeft = sl - delta
+      if (isDragging.current) scrollStart.current -= delta
     }
   }, [])
 
-  // Mouse drag — window-level listeners prevent stuck state when pointer leaves window
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging.current || !trackRef.current) return
@@ -103,7 +100,7 @@ export default function DraggableProductStrip({ products, label, shopAllHref }: 
     if (didDrag.current) e.preventDefault()
   }
 
-  // Native touch scroll fires scroll events — use them to teleport at edges
+  // Native touch scroll on mobile fires scroll events — handles infinite loop
   const handleScroll = () => {
     if (!trackRef.current || isDragging.current) return
     checkInfinite(trackRef.current)
@@ -113,9 +110,9 @@ export default function DraggableProductStrip({ products, label, shopAllHref }: 
 
   return (
     <section className="bg-white border-b border-[#E8E8E8]">
-      <div className="flex items-center justify-between px-4 md:px-24 py-6">
+      <div className="flex items-center justify-between px-4 md:px-24 py-5 md:py-6">
         <span className="text-[11px] font-bold tracking-[3px] text-[#1A1A18]">{label}</span>
-        <Link href={shopAllHref} className="text-[13px] text-[#A8A49E] hover:text-[#1A1A18] transition-colors">
+        <Link href={shopAllHref} className="text-[12px] md:text-[13px] text-[#A8A49E] hover:text-[#1A1A18] transition-colors">
           Shop all
         </Link>
       </div>
